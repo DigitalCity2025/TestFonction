@@ -11,7 +11,7 @@ namespace TestFonction
     public class Function1
     {
         [FunctionName("Function1")]
-        public void Run([TimerTrigger("0 */2 * * * * ")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 */1 * * * * ")]TimerInfo myTimer, ILogger log)
         {
             try
             {
@@ -21,7 +21,7 @@ namespace TestFonction
                 IConfigurationRoot config = builder.Build();
 
                 HttpResponseMessage message = client.PostAsJsonAsync(
-                    config["apiUrl"] + "/api/login", new { Username = config["username"], Password = config["password"] }).Result;
+                    config["apiUrl"] + "/api/login", new { Username = config["user:username"], Password = config["user:password"] }).Result;
                 if (message.IsSuccessStatusCode)
                 {
                     string token = message.Content.ReadAsAsync<TokenDTO>().Result.Token;
