@@ -11,19 +11,30 @@ namespace TestFonction
     public class Function1
     {
         [FunctionName("Function1")]
-        public void Run([TimerTrigger("0 30 12 * * 1 ")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 /5 * * * * ")]TimerInfo myTimer, ILogger log)
         {
-            using HttpClient client = new HttpClient();
-
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            IConfigurationRoot config = builder.Build();
-
-            HttpResponseMessage message = client.PostAsJsonAsync(
-                config["apiUrl"] + "/api/login", new { Username = config["username"], Password = config["password"] }).Result;
-            if(message.IsSuccessStatusCode)
+            try
             {
-                string token = message.Content.ReadAsAsync<TokenDTO>().Result.Token;
-                log.LogInformation(token);
+                using HttpClient client = new HttpClient();
+
+                ConfigurationBuilder builder = new ConfigurationBuilder();
+                IConfigurationRoot config = builder.Build();
+
+                HttpResponseMessage message = client.PostAsJsonAsync(
+                    config["apiUrl"] + "/api/login", new { Username = config["username"], Password = config["password"] }).Result;
+                if (message.IsSuccessStatusCode)
+                {
+                    string token = message.Content.ReadAsAsync<TokenDTO>().Result.Token;
+                    log.LogInformation(token);
+                }
+                else
+                {
+                    log.LogError("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
             }
             // TODO implement what you want
         }
