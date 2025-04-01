@@ -11,7 +11,7 @@ namespace TestFonction
     public class Function1
     {
         [FunctionName("Function1")]
-        public void Run([TimerTrigger("0 /5 * * * * ")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 */2 * * * * ")]TimerInfo myTimer, ILogger log)
         {
             try
             {
